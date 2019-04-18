@@ -1,59 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>점심 뭐먹지</title>
-</head>
-<body>
-	<form method = "post" action = "register_rest.jsp">
-		맛집이름: <input type = "text" name ="rest_name">
-		주소입력: <input type ="text" name = "address">
-		<input type ="submit" value = "맛집등록">
-	</form>
-	
-	<div id="map" style="width:500px;height:400px;"></div>
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7afa81dd64fc9dd5e00fa18dfd8e7f83"></script>
-	<script>
-		var container = document.getElementById('map');
-		var options = {
-			center: new daum.maps.LatLng(37.542168, 126.841328),
-			level: 3
-		};
 
-		var map = new daum.maps.Map(container, options);
-		
-		var marker = new daum.maps.Marker({ 
-		    // 지도 중심좌표에 마커를 생성합니다 
-		    position: map.getCenter() 
-		}); 
-		// 지도에 마커를 표시합니다
-		marker.setMap(map);
-
-		
-		
-	</script>
-	
-	
-	
-</body>
-</html>
-
-
-
-<div id="map" style="width: 500px; height: 400px;"></div>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8a71bac8c67272654bea6640c6356142"></script>
-
-	주소 :<input type ="text" id = "address">
-	<button type ="button" onclick= "move()">지도 보기</button>
-
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8a71bac8c67272654bea6640c6356142&libraries=services,clusterer,drawing"></script>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+
+	var Position_X;
+	var Position_Y;
+
+	
+	
+	function send(y, x){
+		Position_X = x;
+		Position_Y = y;
+		document.position.x.value = Position_X;
+		document.position.y.value = Position_Y;
+	}
+
 	function move() {
 		address = $("#address").val();
-		
+
 		$.ajax({
 			url : 'https://dapi.kakao.com/v2/local/search/address.json',
 			type : 'get',
@@ -70,8 +41,10 @@
 				road_address = doc.road_address;
 				x = road_address.x;
 				y = road_address.y;
+				
 				console.log(x, y);
-				map(y,x);
+				map(y, x);
+				send(y, x);
 				//				$("body").append(result);
 				//					
 			}
@@ -90,13 +63,13 @@
 		};
 
 		var map = new daum.maps.Map(container, options); //지도 생성 및 객체 리턴
-		
+
 		// 마커가 표시될 위치입니다 
-		var markerPosition  = new daum.maps.LatLng(y, x); 
+		var markerPosition = new daum.maps.LatLng(y, x);
 
 		// 마커를 생성합니다
 		var marker = new daum.maps.Marker({
-		    position: markerPosition
+			position : markerPosition
 		});
 
 		// 마커가 지도 위에 표시되도록 설정합니다
@@ -104,10 +77,36 @@
 
 		// 아래 코드는 지도 위의 마커를 제거하는 코드입니다
 		// marker.setMap(null);    
-		
-		
+
 	}
 </script>
+
+
+
+
+<title>점심 뭐먹지</title>
+</head>
+<body>
+	<div id="map" style="width: 500px; height: 400px;"></div>
+	<script>
+		map(37.542168, 126.841328);
+	</script>
+	
+
+	<form method="post" name = "position" action="register_rest.jsp">
+		맛집이름: <input type="text" name="rest_name"> 
+		주소입력: <input type="text" id="address" name="address" onblur="move()"> 
+		<input type = "hidden" name = "x" value = "">
+		<input type = "hidden" name = "y" value = "">
+		<input type="submit" value="맛집등록">
+	</form>
+
+	
+
+
+</body>
+</html>
+
 
 
 
