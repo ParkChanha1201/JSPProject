@@ -98,7 +98,7 @@
 		주소입력: <input type="text" id="address" name="address" onblur="move()"> 
 		<input type = "hidden" name = "x" value = "">
 		<input type = "hidden" name = "y" value = "">
-		<input type="submit" value="맛집등록">
+		<input type="submit" value="맛집등록" onclick = "move()">
 	</form>
 
 	
